@@ -62,6 +62,11 @@ class CircleDetector:
         self.accumulated_angle = 0
         self.circles_completed = 0
         self.in_motion = False
+
+        # [New] track timing for speed calculation
+        self.circle_start_time = None
+        self.last_circle_duration = 0   # time (sec) for last completed circle
+        self.last_circle_speed = 0      # average speed (degrees/sec) for last completed circle
         
     def get_angle(self, x, y):
         """Calculate angle from center (-180 to 180 degrees)"""
@@ -87,8 +92,12 @@ class CircleDetector:
             return False, 0
         
         self.in_motion = True
+
+        # [New] start timing for the new circle
+        if self.circle_start_time is None:
+            self.circle_start_time = time.time()
         
-        # First valid reading
+        # First valid reading the angle
         if self.last_angle is None:
             self.last_angle = angle
             return False, radius
@@ -114,6 +123,17 @@ class CircleDetector:
             # Reset but keep the remainder
             self.accumulated_angle = self.accumulated_angle % 360
             print(f"\n HIT!! Circle #{self.circles_completed} completed! \n")
+
+
+            # [New] calculate speed
+            current_time = time.time()
+            self.last_circle_duration = current_time - self.circle_start_time
+            self.last_circle_speed = 360 / self.last_circle_duration  # degrees per second
+            print(f"   Duration: {self.last_circle_duration:.2f}s")
+            print(f"   Speed: {self.last_circle_speed:.1f} degree/s")
+            print(f"   RPM: {(60/self.last_circle_duration):.1f}\n")
+            # [New] reset circle timer
+            self.circle_start_time = current_time
         
         return circle_completed, radius
 
