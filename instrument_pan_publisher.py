@@ -7,6 +7,7 @@ Reads distance sensor and sends to server
 import board
 import busio
 import adafruit_apds9960.apds9960
+from adafruit_seesaw import seesaw, rotaryio, digitalio
 import time
 import paho.mqtt.client as mqtt
 import uuid
@@ -19,7 +20,6 @@ import subprocess
 import qwiic_proximity
 import time
 import sys
-
 
 # Optional: Display support (comment out if no display)
 try:
@@ -168,7 +168,21 @@ def main():
         return
 
     oProx.begin()
-		
+
+    # Setup Rotary Encoder
+    ss = seesaw.Seesaw(board.I2C(), addr=0x36)
+
+    seesaw_product = (ss.get_version() >> 16) & 0xFFFF
+    print("Found product {}".format(seesaw_product))
+    if seesaw_product != 4991:
+        print("Wrong firmware loaded? Expected 4991")
+
+    ss.pin_mode(24, ss.INPUT_PULLUP)
+    button_held = False
+
+    encoder = rotaryio.IncrementalEncoder(ss)
+    last_position = None
+            
     # Setup MQTT client
     print("Connecting to MQTT broker...")
     client = mqtt.Client(str(uuid.uuid1()))
@@ -239,6 +253,23 @@ def main():
             # Read distance sensor
             proxValue = oProx.get_proximity()
 
+            # Read rotary encoder
+            # negate the position to make clockwise rotation positive
+            position = encoder.position
+            button_pressed = not ss.digital_read(24)
+
+            if position != last_position:
+                last_position = position
+                print("Position: {}".format(position))
+
+            if not button_pressed and not button_held:
+                button_held = True
+                print("Button pressed")
+
+            if button_pressed and button_held:
+                button_held = False
+                print("Button released")
+
             utensil = 'pan'
             
             # Create JSON payload for display and MQTT
@@ -288,7 +319,9 @@ def main():
                     'mac': mac_address,
                     'ip': ip_address,
                     'utensil': utensil,
-                    'data': {"distance" : proxValue}, 
+                    'data': {"distance" : proxValue,
+                             "rotation" : position,
+                             "button" : not button_held}, 
                     'timestamp': int(current_time)
                 })
                 
