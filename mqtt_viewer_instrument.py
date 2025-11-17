@@ -51,17 +51,20 @@ SOUND_RULES = {
     'pan': {
         'file': 'sounds/pan_sizzle.mp3',
         'target_value': random_pan_target, 
-        'should_play': lambda data: data.get('distance', 0) > SOUND_RULES['pan']['target_value']
+        'should_play': lambda data: data.get('distance', 0) > SOUND_RULES['pan']['target_value'],
+        'generate_target': lambda: random.randint(1, 20000) 
     },
     'cutting_board': {
         'file': 'sounds/knife-stab-pull.mp3',
         'target_value': random_cutting_board_target,
-        'should_play': lambda data: len(data) > 0 and data[str(SOUND_RULES['cutting_board']['target_value'])] == 1
+        'should_play': lambda data: len(data) > 0 and data[str(SOUND_RULES['cutting_board']['target_value'])] == 1,
+        'generate_target': lambda: random.randint(0, 2)
     },
     'mixing_bowl': {
         'file': 'sounds/whisking.mp3',
         'target_value': random_mixing_bowl_target, 
-        'should_play': lambda data: data.get('x', 0) > SOUND_RULES['mixing_bowl']['target_value']
+        'should_play': lambda data: data.get('x', 0) > SOUND_RULES['mixing_bowl']['target_value'],
+        'generate_target': lambda: random.randint(0, 1023)
     }
 }
 
@@ -83,6 +86,12 @@ MQTT_PASSWORD = 'device@theFarm'
 
 mqtt_client = None
 
+def broadcast_to_web_client(message, topic):
+    # Add to recent messages
+    recent_messages.append(message)
+
+    # Broadcast to all connected web clients
+    socketio.emit(topic, message, namespace='/')
 
 def on_connect(client, userdata, flags, rc):
     """MQTT connected"""
@@ -142,12 +151,7 @@ def on_message(client, userdata, msg):
             # But maybe we can do the reset on "button press" instead?
             if utensil in ['pan', 'mixing_bowl','cutting_board']:
                 generate_new_target(utensil)
-            
-        # Add to recent messages
-        recent_messages.append(message)
-
-        # Broadcast to all connected web clients
-        socketio.emit('mqtt_message', message, namespace='/')
+        broadcast_to_web_client(message, 'mqtt_message')
         
     except Exception as e:
         print(f'Error processing message: {e}')
@@ -210,26 +214,21 @@ def stop_sound(utensil):
 
 def generate_new_target(utensil):
     """Generate a new random target value for a specific utensil and update SOUND_RULES."""
-    if utensil == 'pan':
-        # Set a new random target distance for pan
-        new_target = random.randint(1, 20000) 
-        SOUND_RULES['pan']['target_value'] = new_target
-        print(f"[TARGET UPDATE] pan target distance set to: {new_target}")
-        return new_target
-    elif utensil == 'mixing_bowl':
-        # set a new random target x for mixing bowl
-        new_target = random.randint(0, 1023)
-        SOUND_RULES['mixing_bowl']['target_value'] = new_target
-        print(f"[TARGET UPDATE] mixing target distance set to: {new_target}")
+    assert utensil in ['pan', 'mixing_bowl', 'cutting_board']
 
-        return new_target
-    elif utensil == 'cutting_board':
-        # set a new random target x for mixing bowl
-        new_target = random.randint(0, 2)
-        SOUND_RULES['cutting_board']['target_value'] = new_target
-        print(f"[TARGET UPDATE] cutting target distance set to: {new_target}")
+    SOUND_RULES[utensil]['target_value'] = SOUND_RULES[utensil]['generate_target']() 
 
-        return new_target
+    # Create message object
+    message = {
+        'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3],
+        'utensil': utensil,
+        'target': SOUND_RULES[utensil]['target_value']
+    }
+
+    # Add to recent messages
+    broadcast_to_web_client(message, 'mqtt_message_target')
+    print(f"[NEW TARGET for {utensil}] {message['target']}")
+
     return None
 
 

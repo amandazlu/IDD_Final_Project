@@ -38,6 +38,11 @@
         pan: null,
         mixing_bowl: null,
     };
+    const targetConfig = {
+        pan: null,
+        cutting_board: null,
+        mixing_bowl: null,
+    };
 
     socket.on('connect', () => {
         console.log('Connected to viewer');
@@ -52,10 +57,21 @@
         renderUtensils();
     });
 
+    socket.on('mqtt_message_target', (message) => {
+        // const {timestamp, utensil, new_target } = message;
+
+        utensil = message.utensil
+        new_target = message.target
+
+        targetConfig[utensil] = new_target;
+        console.log("New target for " + utensil + ": " + new_target)
+        highlightNewTarget(utensil, new_target);
+    });
+
     function checkUtensilTarget(utensil) {
-        console.log('checkUtensilTarget')
+        // console.log('checkUtensilTarget')
         if (utensil == 'pan') { // for testing
-            console.log('asdjkh')
+            // console.log('asdjkh')
             const payload = latestData[utensil];
             // const config = targetConfig[utensil];
             // if (!payload || config.currentTarget === null) return false;
@@ -63,7 +79,7 @@
             const value = payload.data.value;
             // const div = document.querySelector(`#utensils .utensil[data-utensil="${utensil}"]`);
             // if (!div) return false;
-            console.log("helo")
+            // console.log("helo")
 
             // if (value >= config.min && value <= config.max) {
             if (value >= 2 && value <= 50) {
@@ -106,9 +122,12 @@
                 div.className = "utensil updated";
                 div.id = utensil
                 div.innerHTML = `
-                <div class="utensil-name">${utensil}</div>
-                <div class="utensil-data">${JSON.stringify(payload.data, null, 2)}</div>
-                <div class="timestamp">timestamp: ${payload.timestamp}</div>
+                    <div class="utensil-name">${utensil}</div>
+                    <div class="utensil-data">${JSON.stringify(payload.data, null, 2)}</div>
+                    <div class="timestamp">timestamp: ${payload.timestamp}</div>
+                    <div class="target-value" style="color:#66ff99; margin-top:0.3rem;">
+                        ${targetConfig[utensil] !== null ? `Target: ${targetConfig[utensil]}` : ""}
+                    </div>
                 `;
                 container.appendChild(div);
                 // remove highlight after 300ms
@@ -118,6 +137,18 @@
         }
         updateGlobalStatus();
     }
+
+    function highlightNewTarget(utensil, target) {
+    targetConfig[utensil] = target;  
+    renderUtensils();  // <-- ensures UI reflects stored target
+
+    // Flash highlight on updated element
+    const div = document.getElementById(utensil);
+    if (!div) return;
+    div.classList.add('updated');
+    setTimeout(() => div.classList.remove('updated'), 400);
+}
+
 </script>
 </body>
 </html>
