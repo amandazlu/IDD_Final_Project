@@ -147,8 +147,6 @@ class CircleDetector:
             speed_state = "SLOW"
         else:
             speed_state = "FAST"
-
-
         
         # Check if completed a full circle (360 degrees in either direction)
         circle_completed = False
