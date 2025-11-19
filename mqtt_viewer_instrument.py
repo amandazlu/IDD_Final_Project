@@ -17,6 +17,17 @@ import os
 from time import sleep
 from functools import lru_cache
 
+import threading
+import time
+
+chart_data = None
+chart_thread = None
+chart_playing = False
+LEAD_TIME = 3  # seconds early
+
+pending_notes = []
+HIT_WINDOW = 0.150   # +/- 150ms
+
 # Initialize once when the module loads
 pygame.mixer.init()
 print("[OK] Audio system ready")
@@ -124,6 +135,8 @@ def on_message(client, userdata, msg):
             'is_json': is_json
         }
 
+        broadcast_to_web_client(message, 'mqtt_message')
+
         # Play sounds based on utensil and data
         utensil = payload.get('utensil', 'unknown') if is_json else 'unknown'
         data = payload.get('data', {}) if is_json else {}
@@ -136,22 +149,64 @@ def on_message(client, userdata, msg):
         should_play = rule['should_play'](data)
         sound_file = rule['file']
 
-        if should_play and not playing_state[utensil]:
-            # Start the sound
-            loop = utensil == 'pan'  # example: pan sizzle loops, others one-shot
-            play_sound(utensil, sound_file, loop=loop)
-            playing_state[utensil] = True
+        # if should_play and not playing_state[utensil]:
+        #     # Start the sound
+        #     loop = utensil == 'pan'  # example: pan sizzle loops, others one-shot
+        #     play_sound(utensil, sound_file, loop=loop)
+        #     playing_state[utensil] = True
 
-        elif not should_play and playing_state[utensil]:
-            # Stop the sound if condition is no longer true
-            stop_sound(utensil)
-            playing_state[utensil] = False
+        # elif not should_play and playing_state[utensil]:
+        #     # Stop the sound if condition is no longer true
+        #     stop_sound(utensil)
+        #     playing_state[utensil] = False
 
-            # Reset/ Generate new target value for utensil if applicable
-            # But maybe we can do the reset on "button press" instead?
-            if utensil in ['pan', 'mixing_bowl','cutting_board']:
-                generate_new_target(utensil)
-        broadcast_to_web_client(message, 'mqtt_message')
+        #     # Reset/ Generate new target value for utensil if applicable
+        #     # But maybe we can do the reset on "button press" instead?
+        #     if utensil in ['pan', 'mixing_bowl','cutting_board']:
+        #         generate_new_target(utensil)
+
+        now = time.time()
+        instrument = utensil  # you already get this
+        value = data
+
+        # Check pending notes for this instrument
+        for note in pending_notes:
+            if note["instrument"] != instrument:
+                continue
+            if note["hit"]:
+                continue
+
+            dt = now - note["hit_time"]
+
+            # Too early to judge (MQTT reading before window)
+            if dt < -HIT_WINDOW:
+                continue
+
+            # Too late → miss
+            if dt > HIT_WINDOW:
+                note["hit"] = True
+                socketio.emit("note_result", {
+                    "instrument": instrument,
+                    "result": "miss",
+                    "time": now,
+                    "scheduled": note["hit_time"]
+                })
+                print(f"[MISS] {instrument} missed note scheduled at {note['hit_time']}")
+                continue
+
+            # Within window → check if the sensor condition is met
+            rule = SOUND_RULES[instrument]
+            if rule["should_play"](value):
+                note["hit"] = True
+                socketio.emit("note_result", {
+                    "instrument": instrument,
+                    "result": "hit",
+                    "time": now,
+                    "scheduled": note["hit_time"],
+                    "accuracy_ms": int(dt * 1000)
+                })
+                print(f"[HIT] {instrument} accuracy {int(dt*1000)}ms")
+                
         
     except Exception as e:
         print(f'Error processing message: {e}')
@@ -230,6 +285,91 @@ def generate_new_target(utensil):
     print(f"[NEW TARGET for {utensil}] {message['target']}")
 
     return None
+
+def parse_file(file_path="charts/song01.json"):
+    """Load a rhythm chart file and prepare event playback."""
+    global chart_data
+
+    if not os.path.exists(file_path):
+        print(f"[ERROR] Chart file not found: {file_path}")
+        return None
+
+    try:
+        with open(file_path, "r") as f:
+            chart = json.load(f)
+    except Exception as e:
+        print(f"[ERROR] Failed to load chart: {e}")
+        return None
+
+    # Sort events by time (recommended for consistent playback)
+    events = sorted(chart.get("events", []), key=lambda e: e["time"])
+    chart_data = {
+        "bpm": chart.get("bpm", 120),
+        "offset": chart.get("offset", 0.0),
+        "events": events,
+    }
+
+    print(f"[CHART LOADED] {len(events)} events loaded")
+    return chart_data
+
+
+def start_chart_playback():
+    """Start a thread that updates target values in real-time."""
+    global chart_thread, chart_playing
+
+    if chart_data is None:
+        print("[ERROR] No chart loaded. Call parse_file() first.")
+        return
+
+    if chart_thread and chart_thread.is_alive():
+        print("[WARN] Chart already running.")
+        return
+
+    chart_playing = True
+    chart_thread = threading.Thread(target=_chart_loop, daemon=True)
+    chart_thread.start()
+
+
+def _chart_loop():
+    global chart_playing
+
+    events = chart_data["events"]
+    start_time = time.time() + chart_data["offset"]
+
+    print("[CHART] Playback started")
+
+    for event in events:
+        if not chart_playing:
+            break
+
+        backend_event_time = start_time + event["time"]
+
+        # Wait until it's time to SEND this event early
+        now = time.time()
+        send_time = backend_event_time - LEAD_TIME
+
+        if send_time > now:
+            time.sleep(send_time - now)
+
+        # Send event early to client
+        socketio.emit("chart_event", {
+            "instrument": event["instrument"],
+            "target": event["target"],
+            "event_time": backend_event_time,  # exact beat time
+            "server_time": time.time()         # when server sent it
+        })
+
+        pending_notes.append({
+            "instrument": event["instrument"],
+            "target": event["target"],
+            "hit_time": backend_event_time,
+            "hit": False
+        })
+
+        print(f"[CHART SCHEDULE] Sent {event['instrument']} early (will occur at {backend_event_time})")
+
+    chart_playing = False
+    print("[CHART] Playback finished")
 
 
 def close_audio():
