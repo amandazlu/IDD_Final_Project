@@ -18,3 +18,11 @@ For the hosting Pi:
 
 For the instrument Pis:
 1. Run the corresponding publisher (`python <instrument_name>_publisher.py`)
+
+
+## TO DO LIST:
+- finish parsing beat/music file on the backend with generating targets for the instruments
+- show beats on the frontend
+- frontend: show instruments movement with real actions
+- design/create physical prototypes
+- create music file
