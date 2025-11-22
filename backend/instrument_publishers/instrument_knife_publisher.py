@@ -286,9 +286,9 @@ def main():
                     touched = {str(i): 0 for i in range(12)}
 
                 # --- ONLY STREAM WHEN PAD 1 OR 2 OR 3 IS PRESSED ---
-                pad1 = touched.get("1", 0)
-                pad2 = touched.get("2", 0)
-                pad3 = touched.get("3", 0)
+                pad1 = touched.get("0", 0)
+                pad2 = touched.get("1", 0)
+                pad3 = touched.get("2", 0)
 
                 if pad1 == 1 or pad2 == 1 or pad3 == 1:
                     mqtt_payload = json.dumps({
