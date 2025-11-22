@@ -276,48 +276,39 @@ def main():
             # Publish to MQTT at specified interval
             current_time = time.time()
             if current_time - last_publish_time >= PUBLISH_INTERVAL:
-                # Re-create compact payload for MQTT (without indentation)
+
                 try:
-                    # Read touch sensor
                     touched = {str(i): int(touch_sensor[i].value) for i in range(12)}
                     active_pads = [k for k, v in touched.items() if v == 1]
                     print(f"Touched pads: {active_pads}")
                 except Exception as e:
                     print("Sensor read error:", e)
-                    # Ensure `touched` is always defined as a dict
                     touched = {str(i): 0 for i in range(12)}
 
-                # --- Create and publish payload ---
-                mqtt_payload = json.dumps({
-                    'mac': mac_address,
-                    'ip': ip_address,
-                    'utensil': utensil,
-                    'data': touched,
-                    'timestamp': int(current_time)
-                })
+                # --- ONLY STREAM WHEN PAD 1 OR 2 OR 3 IS PRESSED ---
+                pad1 = touched.get("1", 0)
+                pad2 = touched.get("2", 0)
+                pad3 = touched.get("3", 0)
 
-                result = client.publish(MQTT_TOPIC, mqtt_payload)
-            if result.rc == mqtt.MQTT_ERR_SUCCESS:
-                print(f"[OK] Published touch data: {mqtt_payload}")
-            else:
-                print(f"[ERROR] Publish failed: rc={result.rc}")
-                # Publish to MQTT
-                result = client.publish(MQTT_TOPIC, mqtt_payload)
-                
-                if result.rc == mqtt.MQTT_ERR_SUCCESS:
-                    # print(f"[OK] Streaming: RGB({r:3d}, {g:3d}, {b:3d}) | {mac_address[:17]} | rc:{result.rc} mid:{result.mid}")
-                    print(f"     Payload: {mqtt_payload}")
+                if pad1 == 1 or pad2 == 1 or pad3 == 1:
+                    mqtt_payload = json.dumps({
+                        'mac': mac_address,
+                        'ip': ip_address,
+                        'utensil': utensil,
+                        'data': touched,
+                        'timestamp': int(current_time)
+                    })
+
+                    result = client.publish(MQTT_TOPIC, mqtt_payload)
+
+                    if result.rc == mqtt.MQTT_ERR_SUCCESS:
+                        print(f"[OK] Published touch data: {mqtt_payload}")
+                    else:
+                        print(f"[ERROR] Publish failed: rc={result.rc}")
                 else:
-                    print(f"[ERROR] Publish failed: rc={result.rc}")
-                    if not client.is_connected():
-                        print("[ERROR] MQTT client disconnected! Attempting to reconnect...")
-                        try:
-                            client.reconnect()
-                        except Exception as e:
-                            print(f"[ERROR] Reconnect failed: {e}")
-                
+                    print("No relevant pads touched skipping publish.")
+
                 last_publish_time = current_time
-            
             time.sleep(0.1)  # Small delay to prevent CPU spinning
             
         except Exception as e:
