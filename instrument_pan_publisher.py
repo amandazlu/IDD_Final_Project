@@ -42,6 +42,9 @@ MQTT_PASSWORD = 'device@theFarm'
 # Publishing interval (seconds)
 PUBLISH_INTERVAL = 0.1
 
+# Jittering thresholds
+DISTANCE_DEADZONE = 20
+ROTATION_DEADZONE = 0
 
 def get_mac_address():
     """Get the MAC address of the primary network interface"""
@@ -139,6 +142,28 @@ def on_connect(client, userdata, flags, rc):
     else:
         print(f"[ERROR] Connection failed with code {rc}")
 
+def has_changed(prev, current):
+    """Return True if the new value differs enough from the old value."""
+    if prev is None:
+        return True
+
+    if (prev.get("distance") is None or
+        prev.get("rotation") is None or
+        prev.get("button") is None):
+        return True
+
+    # Distance jitter reduction
+    if abs(current["distance"] - prev["distance"]) > DISTANCE_DEADZONE:
+        return True
+
+    # Button is binary, no jitter
+    if current["button"] == True:
+        return True
+    elif current["button"] != prev["button"]:
+        return True
+
+    return False
+
 
 def main():
     print("=" * 50)
@@ -178,7 +203,7 @@ def main():
         print("Wrong firmware loaded? Expected 4991")
 
     ss.pin_mode(24, ss.INPUT_PULLUP)
-    button_held = False
+    button_held = True
 
     encoder = rotaryio.IncrementalEncoder(ss)
     last_position = None
@@ -222,34 +247,14 @@ def main():
     print("=" * 50 + "\n")
     
     last_publish_time = 0
-    
+    previous_data = {
+    "distance": None,
+    "rotation": None,
+    "button": None
+}
     # Main loop
     while True:
         try:
-            # Read color sensor
-            # r, g, b, a = sensor.color_data
-            
-            # # Color boost - APDS9960 sensors need calibration
-            # r = int(r * 1.2)  # Boost red by 20% for better yellows/oranges
-            # g = int(g * 1.2)  # Boost green by 20% for better yellows
-            # b = int(b * 1.7)  # Boost blue by 70% (blue is most underreported)
-            
-            # # Convert from 16-bit to 8-bit color with better scaling
-            # # Use a different normalization approach
-            # if r > 0 or g > 0 or b > 0:
-            #     # Find max value to scale proportionally
-            #     max_val = max(r, g, b)
-            #     if max_val > 0:
-            #         # Scale to 8-bit range while preserving ratios
-            #         scale = 255.0 / max_val
-            #         r = int(min(255, r * scale))
-            #         g = int(min(255, g * scale))
-            #         b = int(min(255, b * scale))
-            #     else:
-            #         r = g = b = 0
-            # else:
-            #     r = g = b = 0
-
             # Read distance sensor
             proxValue = oProx.get_proximity()
 
@@ -260,15 +265,15 @@ def main():
 
             if position != last_position:
                 last_position = position
-                print("Position: {}".format(position))
+                print ("Position:" , position)
 
             if not button_pressed and not button_held:
                 button_held = True
-                print("Button pressed")
+                print("Button released")
 
             if button_pressed and button_held:
                 button_held = False
-                print("Button released")
+                print("Button pressed")
 
             utensil = 'pan'
             
@@ -311,21 +316,24 @@ def main():
             
 
             
-            # Publish to MQTT at specified interval
-            current_time = time.time()
-            if current_time - last_publish_time >= PUBLISH_INTERVAL:
-                # Re-create compact payload for MQTT (without indentation)
+            # Publish to MQTT on changes
+            current_data = {
+                "distance": proxValue,
+                "rotation": position,
+                "button": not button_held,
+            }
+            
+            if has_changed(previous_data, current_data):
+                previous_data = current_data.copy()
+
                 mqtt_payload = json.dumps({
                     'mac': mac_address,
                     'ip': ip_address,
                     'utensil': utensil,
-                    'data': {"distance" : proxValue,
-                             "rotation" : position,
-                             "button" : not button_held}, 
-                    'timestamp': int(current_time)
+                    'data': current_data,
+                    'timestamp': int(time.time())
                 })
-                
-                # Publish to MQTT
+
                 result = client.publish(MQTT_TOPIC, mqtt_payload)
                 
                 if result.rc == mqtt.MQTT_ERR_SUCCESS:
@@ -339,8 +347,6 @@ def main():
                             client.reconnect()
                         except Exception as e:
                             print(f"[ERROR] Reconnect failed: {e}")
-                
-                last_publish_time = current_time
             
             time.sleep(0.1)  # Small delay to prevent CPU spinning
             

@@ -20,7 +20,7 @@
       "notes": [
         { "midi": 60, "time": 0,   "ticks": 0,    "durationTicks": 480,  "name": "C4", "pitch": "C", "octave": 4, "velocity": 0.8, "duration": 1 },
         { "midi": 62, "time": 10, "ticks": 720,  "durationTicks": 480,  "name": "D4", "pitch": "D", "octave": 4, "velocity": 0.8, "duration": 1 },
-        { "midi": 64, "time": 20,   "ticks": 1440, "durationTicks": 480,  "name": "E4", "pitch": "E", "octave": 4, "velocity": 0.8, "duration": 1 }
+        { "midi": 64, "time": 20,   "ticks": 1440, "durationTicks": 480,  "name": "E4", "pitch": "E", "octave": 4, "velocity": 0.8, "duration": 3 }
       ],
       "controlChanges": {},
       "instrument": {
