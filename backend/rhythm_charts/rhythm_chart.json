@@ -5,7 +5,22 @@
   "num_tracks": 3,
   "events": [
     {
-      "time": 0,
+      "time": 2,
+      "type": "note",
+      "track": "Instrument 3",
+      "utensil": "mixing_bowl",
+      "channel": 2,
+      "instrument": "string ensemble 1",
+      "midi": 55,
+      "note_name": "G3",
+      "pitch": "G",
+      "octave": 3,
+      "velocity": 0.8,
+      "duration": 1.2,
+      "target": "low"
+    },
+    {
+      "time": 5,
       "type": "note",
       "track": "Instrument 1",
       "utensil": "pan",
@@ -20,7 +35,7 @@
       "target": "low"
     },
     {
-      "time": 0,
+      "time": 5,
       "type": "note",
       "track": "Instrument 2",
       "utensil": "cutting_board",
@@ -31,23 +46,8 @@
       "pitch": "A",
       "octave": 3,
       "velocity": 0.8,
-      "duration": 2,
-      "target": "1"
-    },
-    {
-      "time": 0,
-      "type": "note",
-      "track": "Instrument 3",
-      "utensil": "mixing_bowl",
-      "channel": 2,
-      "instrument": "string ensemble 1",
-      "midi": 55,
-      "note_name": "G3",
-      "pitch": "G",
-      "octave": 3,
-      "velocity": 0.8,
-      "duration": 1.2,
-      "target": null
+      "duration": 1,
+      "target": "0"
     },
     {
       "time": 7.5,
@@ -62,7 +62,7 @@
       "octave": 3,
       "velocity": 0.8,
       "duration": 1.2,
-      "target": null
+      "target": "high"
     },
     {
       "time": 10,
@@ -91,8 +91,8 @@
       "pitch": "B",
       "octave": 3,
       "velocity": 0.8,
-      "duration": 1.5,
-      "target": "2"
+      "duration": 1,
+      "target": "1"
     },
     {
       "time": 17.5,
@@ -107,7 +107,7 @@
       "octave": 3,
       "velocity": 0.8,
       "duration": 1.2,
-      "target": null
+      "target": "low"
     },
     {
       "time": 20,
@@ -137,7 +137,7 @@
       "octave": 4,
       "velocity": 0.8,
       "duration": 1,
-      "target": "3"
+      "target": "2"
     },
     {
       "time": 30,
@@ -147,7 +147,7 @@
       "channel": 1,
       "instrument": "acoustic guitar (nylon)",
       "midi": 57,
-      "note_name": "A3",
+      "note_name": "B3",
       "pitch": "A",
       "octave": 3,
       "velocity": 0.8,

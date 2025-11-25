@@ -57,8 +57,11 @@ def should_play(utensil, sensor_data, target, threshold):
         return sensor_data.get(button_id, 0) == 1
     
     elif utensil == "mixing_bowl":
-        # Mixing bowl uses accelerometer
-        return sensor_data.get('x', 0) > target
+        curr_val = sensor_data.get('speed', 0)
+        if target == "low":
+            return sensor_data.get('speed', 0) < 400
+        elif target == "high":
+            return sensor_data.get('speed', 0) > 400
     
     return False
 

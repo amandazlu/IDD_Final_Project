@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kitchen Rhythm Game 🍳</title>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        /* Game Container */
+        #game-container {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            background: linear-gradient(to bottom, #ffeaa7 0%, #fff5e6 100%);
+        }
+
+        /* Header */
+        #game-header {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            padding: 1rem 2rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            border-bottom: 4px solid #d63031;
+        }
+
+        #game-title {
+            font-size: 2.5rem;
+            color: white;
+            text-shadow: 3px 3px 0 rgba(0,0,0,0.3);
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+
+        /* Score Display */
+        #score-display {
+            position: absolute;
+            bottom: 120px;
+            right: 2rem;
+            background: white;
+            padding: 1rem 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            border: 3px solid #d63031;
+            z-index: 20;
+        }
+
+        #score-display h3 {
+            color: #d63031;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        #score {
+            font-size: 2rem;
+            color: #2d3436;
+            font-weight: 700;
+        }
+
+        #combo {
+            font-size: 1rem;
+            color: #fdcb6e;
+            margin-top: 0.3rem;
+            font-weight: 600;
+        }
+
+        /* Note Highway - 3 tracks like sheet music */
+        #note-highway {
+            position: relative;
+            width: 90%;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        /* Individual Track Row */
+        .track {
+            position: relative;
+            height: 100px;
+            margin-bottom: 1.5rem;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 15px;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden; /* CRITICAL: Clips notes to track boundaries */
+        }
+
+        /* Track Label */
+        .track-label {
+            position: absolute;
+            left: -120px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: white;
+            padding: 0.75rem 1.25rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            border: 3px solid;
+            z-index: 10;
+            min-width: 100px;
+            text-align: center;
+        }
+
+        .track[data-utensil="pan"] { background: rgba(255, 107, 107, 0.2); }
+        .track[data-utensil="pan"] .track-label { 
+            color: #ff6b6b; 
+            border-color: #ff6b6b; 
+        }
+
+        .track[data-utensil="cutting_board"] { background: rgba(106, 176, 76, 0.2); }
+        .track[data-utensil="cutting_board"] .track-label { 
+            color: #6ab04c; 
+            border-color: #6ab04c; 
+        }
+
+        .track[data-utensil="mixing_bowl"] { background: rgba(52, 152, 219, 0.2); }
+        .track[data-utensil="mixing_bowl"] .track-label { 
+            color: #3498db; 
+            border-color: #3498db; 
+        }
+
+        /* Timing Bar - where notes should be hit */
+        .timing-bar {
+            position: absolute;
+            right: 15%;
+            top: 0;
+            bottom: 0;
+            width: 6px;
+            background: linear-gradient(to bottom,
+                transparent 0%,
+                rgba(214, 48, 49, 0.3) 20%,
+                #d63031 50%,
+                rgba(214, 48, 49, 0.3) 80%,
+                transparent 100%
+            );
+            z-index: 50; /* Above notes so it's always visible */
+            box-shadow: 0 0 15px rgba(214, 48, 49, 0.6);
+            border-radius: 3px;
+        }
+
+        .timing-bar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(0.9); }
+            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+        }
+
+        /* Notes */
+        .note {
+            position: absolute;
+            left: 0%; /* Start at left edge of track */
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 0.75rem 1.25rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            border: 4px solid;
+            z-index: 3;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* TAP Note - Circle/Bubble style */
+        .note.tap {
+            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+            border-radius: 50%;
+            width: 70px;
+            height: 70px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        /* HOLD Note - Elongated pill with stripes */
+        .note.hold {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            border-radius: 35px;
+            min-width: 150px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .note.hold::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255,255,255,0.3) 10px,
+                rgba(255,255,255,0.3) 20px
+            );
+            z-index: 1;
+        }
+
+        .note.hold .note-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .note.hold::after {
+            content: '⏱️';
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            z-index: 2;
+        }
+
+        /* Different utensil colors */
+        .note[data-utensil="pan"] { border-color: #ff6b6b; color: #ff6b6b; }
+        .note[data-utensil="cutting_board"] { border-color: #6ab04c; color: #6ab04c; }
+        .note[data-utensil="mixing_bowl"] { border-color: #3498db; color: #3498db; }
+
+        /* Note animations - slides left to right across full track */
+        @keyframes slideNote {
+            from { 
+                left: 0%; 
+                opacity: 1;
+            }
+            to { 
+                left: 100%; /* Slides completely across and off the track */
+                opacity: 1;
+            }
+        }
+
+        /* Hit feedback */
+        .hit-feedback {
+            position: absolute;
+            right: 15%;
+            top: 50%;
+            transform: translate(50%, -50%);
+            font-size: 2rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            z-index: 100;
+            animation: popFeedback 0.6s ease-out;
+            pointer-events: none;
+        }
+
+        @keyframes popFeedback {
+            0% { transform: translate(50%, -50%) scale(0); opacity: 0; }
+            50% { transform: translate(50%, -50%) scale(1.3); opacity: 1; }
+            100% { transform: translate(50%, -50%) scale(1) translateY(-30px); opacity: 0; }
+        }
+
+        .hit-feedback.hit { color: #00b894; }
+        .hit-feedback.miss { color: #d63031; }
+        .hit-feedback.hold-start { color: #fdcb6e; }
+        .hit-feedback.hold-complete { color: #6c5ce7; }
+        .hit-feedback.hold-break { color: #ff7675; }
+
+        /* Bottom section placeholder */
+        #bottom-section {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: calc(100vh - 500px);
+            background: linear-gradient(to bottom, transparent 0%, rgba(255,255,255,0.3) 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #placeholder-text {
+            font-size: 1.5rem;
+            color: rgba(0,0,0,0.2);
+            text-align: center;
+            font-weight: 600;
+        }
+
+        /* Debug info */
+        #debug-info {
+            position: absolute;
+            top: 220px;
+            left: 1rem;
+            background: rgba(0,0,0,0.7);
+            color: #0f0;
+            padding: 0.5rem;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 0.8rem;
+            max-width: 300px;
+            z-index: 20;
+        }
+    </style>
+</head>
+
+<body>
+<div id="game-container">
+    <!-- Header -->
+    <div id="game-header">
+        <h1 id="game-title">🍳 Kitchen Rhythm 🎵</h1>
+    </div>
+
+    <!-- Score Display -->
+    <div id="score-display">
+        <h3>Score</h3>
+        <div id="score">0</div>
+        <div id="combo">Combo: 0x</div>
+    </div>
+
+    <!-- Debug Info 
+    <div id="debug-info">
+        <div>Waiting for notes...</div>
+    </div>
+    -->
+
+    <!-- Note Highway - 3 separate tracks -->
+    <div id="note-highway">
+        <!-- Pan Track -->
+        <div class="track" data-utensil="pan">
+            <div class="track-label">🍳 PAN</div>
+            <div class="timing-bar"></div>
+        </div>
+
+        <!-- Cutting Board Track -->
+        <div class="track" data-utensil="cutting_board">
+            <div class="track-label">🔪 KNIFE</div>
+            <div class="timing-bar"></div>
+        </div>
+
+        <!-- Mixing Bowl Track -->
+        <div class="track" data-utensil="mixing_bowl">
+            <div class="track-label">🥣 BOWL</div>
+            <div class="timing-bar"></div>
+        </div>
+    </div>
+
+    <!-- Bottom Section (placeholder) -->
+    <div id="bottom-section">
+        <div id="placeholder-text">
+            🎮 Get ready to cook! 🎮
+        </div>
+    </div>
+</div>
+
+<script>
+    // ============================================================================
+    // GAME STATE
+    // ============================================================================
+    const socket = io();
+    
+    let score = 0;
+    let combo = 0;
+    let activeNotes = new Map(); // Map of note ID -> note element
+
+    const LEAD_TIME = 3; // seconds (must match backend)
+
+    // ============================================================================
+    // SOCKET EVENT HANDLERS
+    // ============================================================================
+
+    socket.on('connect', () => {
+        console.log('Connected to server');
+        // updateDebug('Connected! Waiting for chart...');
+    });
+
+    socket.on('chart_event', (event) => {
+        // Visual event: Show note on screen
+        // event = {instrument, target, event_time, server_time, duration, is_hold}
+        console.log('[CHART EVENT]', event);
+        createNote(event);
+    });
+
+    socket.on('target_active', (event) => {
+        // Backend has activated this target for hit detection
+        // event = {utensil, instrument, target, event_time}
+        console.log('[TARGET ACTIVE]', event);
+        // updateDebug(`Active: ${event.utensil} → ${event.target}`);
+    });
+
+    socket.on('note_result', (result) => {
+        // Hit/miss result from backend
+        // result = {utensil, instrument, result, note_type, time, scheduled, accuracy_ms, ...}
+        console.log('[NOTE RESULT]', result);
+        handleNoteResult(result);
+    });
+
+    socket.on('mqtt_message', (message) => {
+        // Raw MQTT data (for debugging)
+        if (message.is_json) {
+            const payload = JSON.parse(message.payload);
+            // You can add sensor data visualization here if needed
+        }
+    });
+
+    // ============================================================================
+    // NOTE CREATION & ANIMATION
+    // ============================================================================
+
+    function createNote(event) {
+        const utensil = event.utensil;
+        const track = document.querySelector(`.track[data-utensil="${utensil}"]`);
+        
+        if (!track) {
+            console.warn('Unknown utensil:', utensil);
+            return;
+        }
+
+        // Calculate timing
+        const now = Date.now() / 1000;
+        const timeUntilHit = event.event_time - now;
+        
+        // IMPORTANT: The note should travel from left edge to timing bar (85% position)
+        // If timeUntilHit is very small, the note appears too late
+        // We want notes to be visible for the full LEAD_TIME duration
+        
+        // Calculate how long the animation should take
+        // The note needs to reach the timing bar at event_time
+        const animationDuration = Math.max(timeUntilHit, 0.5); // At least 0.5s visible
+        
+        console.log(`[NOTE CREATE] ${utensil} - Time until hit: ${timeUntilHit.toFixed(2)}s, Animation: ${animationDuration.toFixed(2)}s`);
+        // (`Note spawned: ${utensil} in ${timeUntilHit.toFixed(1)}s`);
+
+        // Create note element
+        const note = document.createElement('div');
+        note.className = `note ${event.is_hold ? 'hold' : 'tap'}`;
+        note.dataset.utensil = utensil;
+        note.dataset.eventTime = event.event_time;
+        note.dataset.noteId = `${utensil}-${event.event_time}`;
+        
+        // FORCE VISIBILITY FOR DEBUGGING
+        note.style.opacity = '1';
+        note.style.zIndex = '100';
+        
+        // Set note content
+        const noteText = formatTarget(utensil, event.target);
+        
+        if (event.is_hold) {
+            const content = document.createElement('div');
+            content.className = 'note-content';
+            content.innerHTML = `<span>${noteText}</span><span style="font-size:0.8rem;">${event.duration.toFixed(1)}s</span>`;
+            note.appendChild(content);
+            
+            // Make hold note width proportional to duration
+            const baseWidth = 150;
+            const widthPerSecond = 30;
+            note.style.minWidth = `${baseWidth + (event.duration * widthPerSecond)}px`;
+        } else {
+            note.textContent = noteText;
+        }
+
+        // Add to track
+        track.appendChild(note);
+        
+        console.log(`[NOTE ADDED] Note element added to DOM:`, note);
+        console.log(`[NOTE POSITION] Initial left: ${note.style.left}, computed: ${getComputedStyle(note).left}`);
+
+        // Start animation (left to right)
+        // The animation will take the note from left edge (0%) to timing bar (85%)
+        note.style.animation = `slideNote ${animationDuration}s linear forwards`;
+        
+        console.log(`[NOTE ANIMATION] Animation started: slideNote ${animationDuration}s`);
+
+        // Store reference
+        activeNotes.set(note.dataset.noteId, note);
+        
+        console.log(`[ACTIVE NOTES] Total active: ${activeNotes.size}`);
+
+        // Auto-remove after animation + grace period
+        setTimeout(() => {
+            if (activeNotes.has(note.dataset.noteId)) {
+                console.log(`[NOTE REMOVE] Removing note: ${note.dataset.noteId}`);
+                note.remove();
+                activeNotes.delete(note.dataset.noteId);
+            }
+        }, (animationDuration + 1) * 1000);
+    }
+
+    function formatTarget(utensil, target) {
+        if (utensil === 'pan') {
+            if (target === 'high') return '🔥';
+            if (target === 'low') return '🌡️';
+            return target;
+        } else if (utensil === 'cutting_board') {
+            return '⬆️';
+        } else if (utensil === 'mixing_bowl') {
+            return '🌀';
+        }
+        return target;
+    }
+
+    // ============================================================================
+    // HIT RESULT HANDLING
+    // ============================================================================
+
+    function handleNoteResult(result) {
+        const { utensil, result: resultType, note_type, accuracy_ms, completion_percent } = result;
+        
+        // Update score and combo
+        if (resultType === 'hit' || resultType === 'hold_start') {
+            score += 100;
+            combo++;
+            showFeedback(utensil, resultType, accuracy_ms);
+        } else if (resultType === 'hold_complete') {
+            score += 300; // Bonus for completing hold
+            combo++;
+            showFeedback(utensil, resultType);
+        } else if (resultType === 'hold_break') {
+            score += Math.floor(completion_percent); // Partial credit
+            combo = 0;
+            showFeedback(utensil, resultType, null, completion_percent);
+        } else if (resultType === 'miss') {
+            combo = 0;
+            showFeedback(utensil, resultType);
+        }
+
+        updateScore();
+    }
+
+    function showFeedback(utensil, resultType, accuracy_ms = null, completion = null) {
+        const track = document.querySelector(`.track[data-utensil="${utensil}"]`);
+        
+        const feedback = document.createElement('div');
+        feedback.className = `hit-feedback ${resultType}`;
+        
+        // Set feedback text
+        if (resultType === 'hit') {
+            if (accuracy_ms !== null && Math.abs(accuracy_ms) < 50) {
+                feedback.textContent = '✨ PERFECT! ✨';
+            } else {
+                feedback.textContent = '✓ GOOD!';
+            }
+        } else if (resultType === 'hold_start') {
+            feedback.textContent = '🎯 HOLD!';
+        } else if (resultType === 'hold_complete') {
+            feedback.textContent = '⭐ EXCELLENT! ⭐';
+        } else if (resultType === 'hold_break') {
+            feedback.textContent = `💔 ${completion}%`;
+        } else if (resultType === 'miss') {
+            feedback.textContent = '✗ MISS';
+        }
+        
+        track.appendChild(feedback);
+        
+        // Remove after animation
+        setTimeout(() => feedback.remove(), 600);
+    }
+
+    function updateScore() {
+        document.getElementById('score').textContent = score;
+        document.getElementById('combo').textContent = `Combo: ${combo}x`;
+    }
+
+    // function updateDebug(message) {
+    //     const debugDiv = document.getElementById('debug-info');
+    //     const timestamp = new Date().toLocaleTimeString();
+    //     debugDiv.innerHTML = `<div>[${timestamp}] ${message}</div>` + debugDiv.innerHTML;
+        
+    //     // Keep only last 5 messages
+    //     const messages = debugDiv.querySelectorAll('div');
+    //     if (messages.length > 5) {
+    //         messages[messages.length - 1].remove();
+    //     }
+    // }
+
+    // ============================================================================
+    // INITIALIZATION
+    // ============================================================================
+
+    console.log('Kitchen Rhythm Game loaded! 🎮');
+</script>
+</body>
+</html>

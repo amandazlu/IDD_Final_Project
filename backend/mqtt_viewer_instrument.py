@@ -460,8 +460,7 @@ def _chart_loop():
                 "server_time": now
             })
             
-            if evt['utensil'] == "pan":
-                print(f"[VISUAL] {evt['utensil']} (target={evt['target']})")
+            print(f"[VISUAL] {evt['utensil']} (target={evt['target']})")
 
         # Process all activation events that should be active now
         while activation_queue and activation_queue[0][0] <= now:
@@ -479,8 +478,7 @@ def _chart_loop():
                 "event_time": now
             })
 
-            if evt['utensil'] == "pan":
-                print(f"[ACTIVE] {evt['utensil']} = {evt['target']}")
+            print(f"[ACTIVE] {evt['utensil']} = {evt['target']}")
         
         time.sleep(0.01)  # 10ms tick
 

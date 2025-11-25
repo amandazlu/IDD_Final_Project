@@ -18,7 +18,7 @@
       "channel": 0,
       "pitchBends": [],
       "notes": [
-        { "midi": 60, "time": 0,   "ticks": 0,    "durationTicks": 480,  "name": "C4", "pitch": "C", "octave": 4, "velocity": 0.8, "duration": 1 },
+        { "midi": 60, "time": 5,   "ticks": 0,    "durationTicks": 480,  "name": "C4", "pitch": "C", "octave": 4, "velocity": 0.8, "duration": 1 },
         { "midi": 62, "time": 10, "ticks": 720,  "durationTicks": 480,  "name": "D4", "pitch": "D", "octave": 4, "velocity": 0.8, "duration": 1 },
         { "midi": 64, "time": 20,   "ticks": 1440, "durationTicks": 480,  "name": "E4", "pitch": "E", "octave": 4, "velocity": 0.8, "duration": 3 }
       ],
@@ -36,10 +36,10 @@
       "channel": 1,
       "pitchBends": [],
       "notes": [
-        { "midi": 57, "time": 0,   "ticks": 0,    "durationTicks": 960,  "name": "A3", "pitch": "A", "octave": 3, "velocity": 0.8, "duration": 2 },
-        { "midi": 59, "time": 12.5, "ticks": 1200, "durationTicks": 720,  "name": "B3", "pitch": "B", "octave": 3, "velocity": 0.8, "duration": 1.5 },
+        { "midi": 57, "time": 5,   "ticks": 0,    "durationTicks": 960,  "name": "A3", "pitch": "A", "octave": 3, "velocity": 0.8, "duration": 1 },
+        { "midi": 59, "time": 12.5, "ticks": 1200, "durationTicks": 720,  "name": "B3", "pitch": "B", "octave": 3, "velocity": 0.8, "duration": 1 },
         { "midi": 60, "time": 22.5, "ticks": 2160, "durationTicks": 480,  "name": "C4", "pitch": "C", "octave": 4, "velocity": 0.8, "duration": 1 },
-        { "midi": 57, "time": 30,   "ticks": 2880, "durationTicks": 480,  "name": "A3", "pitch": "A", "octave": 3, "velocity": 0.8, "duration": 1 }
+        { "midi": 57, "time": 30,   "ticks": 2880, "durationTicks": 480,  "name": "B3", "pitch": "A", "octave": 3, "velocity": 0.8, "duration": 1 }
       ],
       "controlChanges": {},
       "instrument": {
@@ -55,7 +55,7 @@
       "channel": 2,
       "pitchBends": [],
       "notes": [
-        { "midi": 55, "time": 0,   "ticks": 0,    "durationTicks": 576,  "name": "G3", "pitch": "G", "octave": 3, "velocity": 0.8, "duration": 1.2 },
+        { "midi": 55, "time": 2,   "ticks": 0,    "durationTicks": 576,  "name": "G3", "pitch": "G", "octave": 3, "velocity": 0.8, "duration": 1.2 },
         { "midi": 53, "time": 7.5, "ticks": 720,  "durationTicks": 576,  "name": "F3", "pitch": "F", "octave": 3, "velocity": 0.8, "duration": 1.2 },
         { "midi": 52, "time": 17.5, "ticks": 1680, "durationTicks": 576,  "name": "E3", "pitch": "E", "octave": 3, "velocity": 0.8, "duration": 1.2 }
       ],
