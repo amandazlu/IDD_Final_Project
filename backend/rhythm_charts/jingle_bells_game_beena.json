@@ -377,7 +377,7 @@
           "durationTicks": 480,
           "name": "B3",
           "pitch": "B",
-          "octave": 4,
+          "octave": 3,
           "velocity": 0.8,
           "duration": 0.438
         },
@@ -443,7 +443,7 @@
           "durationTicks": 480,
           "name": "B3",
           "pitch": "B",
-          "octave": 4,
+          "octave": 3,
           "velocity": 0.8,
           "duration": 0.438
         },
@@ -465,7 +465,7 @@
           "durationTicks": 480,
           "name": "C4",
           "pitch": "C",
-          "octave": 3,
+          "octave": 4,
           "velocity": 0.8,
           "duration": 0.438
         },
@@ -487,7 +487,7 @@
           "durationTicks": 480,
           "name": "C4",
           "pitch": "C",
-          "octave": 3,
+          "octave": 4,
           "velocity": 0.8,
           "duration": 0.438
         },
@@ -498,7 +498,7 @@
           "durationTicks": 480,
           "name": "C4",
           "pitch": "C",
-          "octave": 3,
+          "octave": 4,
           "velocity": 0.8,
           "duration": 0.438
         },
@@ -509,7 +509,7 @@
           "durationTicks": 480,
           "name": "A3",
           "pitch": "A",
-          "octave": 4,
+          "octave": 3,
           "velocity": 0.8,
           "duration": 0.438
         },
