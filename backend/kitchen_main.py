@@ -2,6 +2,7 @@
 Kitchen Rhythm Game - Main Application Entry Point
 Physical cooking utensils as rhythm game controllers via MQTT
 """
+import time
 
 from flask import Flask, render_template
 from flask_socketio import SocketIO, emit
@@ -20,6 +21,9 @@ socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
 
 # Store recent messages for new clients
 recent_messages = deque(maxlen=MAX_MESSAGES)
+
+# Store loaded chart data for restart functionality
+chart_data = None
 
 
 # ============================================================================
@@ -61,6 +65,16 @@ def handle_filter(data):
     emit('filter_updated', data)
 
 
+@socketio.on('restart_chart')
+def handle_restart_chart():
+    """Restart the rhythm chart from the beginning."""
+    print('[RESTART] Chart restart requested')
+    from chart_manager import restart_chart_playback
+    restart_chart_playback(socketio, chart_data)
+    emit('chart_restarted', broadcast=True)
+    print('[RESTART] Chart restarted successfully')
+
+
 # ============================================================================
 # MAIN ENTRY POINT
 # ============================================================================
@@ -69,7 +83,7 @@ if __name__ == '__main__':
     print("=" * 60)
     print("  Kitchen Rhythm Game - MQTT Viewer")
     print("=" * 60)
-    print(f"  Viewer URL:  http://0.0.0.0:5001")
+    print(f"  Viewer URL:  http://0.0.0.0:5002")
     print(f"  Monitoring:  {MQTT_TOPIC} on {MQTT_BROKER}")
     print("=" * 60)
 
@@ -88,7 +102,7 @@ if __name__ == '__main__':
     start_chart_playback(socketio, chart_data)
     
     # Run Flask app
-    socketio.run(app, host='0.0.0.0', port=5001, debug=False, allow_unsafe_werkzeug=True)
+    socketio.run(app, host='0.0.0.0', port=5002, debug=False, allow_unsafe_werkzeug=True)
     
     # Cleanup
     close_audio()

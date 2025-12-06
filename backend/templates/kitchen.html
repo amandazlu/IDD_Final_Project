@@ -79,6 +79,53 @@
             font-weight: 600;
         }
 
+        /* Countdown Overlay */
+        #countdown-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        #countdown-overlay.active {
+            display: flex;
+        }
+
+        #countdown-number {
+            font-size: 15rem;
+            color: white;
+            font-weight: 700;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.8),
+                         0 0 60px rgba(255, 255, 255, 0.5);
+            animation: countdownPulse 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes countdownPulse {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
         /* Note Highway - 3 tracks like sheet music */
         #note-highway {
             position: relative;
@@ -196,7 +243,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.9rem;
+            font-size: 3rem;
             font-weight: 700;
         }
 
@@ -320,11 +367,179 @@
             max-width: 300px;
             z-index: 20;
         }
+
+        /* Instructions Modal */
+        #instructions-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        #instructions-modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            border: 4px solid #d63031;
+        }
+
+        .modal-content h2 {
+            color: #d63031;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .modal-content h3 {
+            color: #ff6b6b;
+            font-size: 1.5rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .modal-content p {
+            color: #2d3436;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .modal-content ul {
+            color: #2d3436;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .modal-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .instrument-icon {
+            font-size: 1.5rem;
+            margin-right: 0.5rem;
+        }
+
+        #close-modal-btn {
+            display: block;
+            margin: 2rem auto 0;
+            padding: 1rem 2.5rem;
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,184,148,0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        #close-modal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,184,148,0.6);
+        }
+
+        #close-modal-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Help Button */
+        #help-btn {
+            position: absolute;
+            top: 1.5rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+            color: white;
+            border: 3px solid white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(108,92,231,0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #help-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(108,92,231,0.6);
+        }
+
+        #help-btn:active {
+            transform: scale(0.95);
+        }
     </style>
 </head>
 
 <body>
 <div id="game-container">
+    <!-- Instructions Modal -->
+    <div id="instructions-modal" class="active">
+        <div class="modal-content">
+            <h2>🍳 How to Play 🎵</h2>
+            
+            <h3>🎮 Game Objective</h3>
+            <p>Use physical kitchen utensils to hit notes as they reach the timing bar! Each track corresponds to a different utensil.</p>
+            
+            <h3>🔧 The Instruments</h3>
+            <ul>
+                <li><span class="instrument-icon">🍳</span><strong>Pan:</strong> Toggle heat between high (🔥) and low (🌡️)</li>
+                <li><span class="instrument-icon">🔪</span><strong>Knife:</strong> Lift the knife up (⬆️) when notes appear</li>
+                <li><span class="instrument-icon">🥣</span><strong>Bowl:</strong> Rotate/mix the bowl (🌀) when prompted</li>
+            </ul>
+            
+            <h3>📊 Scoring</h3>
+            <ul>
+                <li><strong>Tap Notes:</strong> 100 points for hitting at the right time</li>
+                <li><strong>Hold Notes:</strong> Hold the action for the duration shown</li>
+                <li><strong>Perfect Hit:</strong> Within 50ms of the timing bar</li>
+                <li><strong>Combo:</strong> Chain hits together for higher scores!</li>
+            </ul>
+            
+            <h3>🎯 Tips</h3>
+            <ul>
+                <li>Watch notes slide from left to right across each track</li>
+                <li>Perform the action when notes reach the red timing bar</li>
+                <li>Hold notes show duration - maintain the action!</li>
+                <li>Miss too many and your combo resets to 0</li>
+            </ul>
+            
+            <button id="close-modal-btn">🎮 Start Playing!</button>
+        </div>
+    </div>
+
+    <!-- Countdown Overlay -->
+    <div id="countdown-overlay">
+        <div id="countdown-number">3</div>
+    </div>
+
+    <!-- Help Button -->
+    <button id="help-btn" title="Show Instructions">?</button>
+
     <!-- Header -->
     <div id="game-header">
         <h1 id="game-title">🍳 Kitchen Rhythm 🎵</h1>
@@ -336,6 +551,8 @@
         <div id="score">0</div>
         <div id="combo">Combo: 0x</div>
     </div>
+
+     <button id="restart-btn" style="margin-top: 1rem; padding: 0.5rem 1rem; font-size: 1rem; cursor: pointer; background: #e74c3c; color: white; border: none; border-radius: 8px; font-weight: 600;">🔄 Restart Song</button>
 
     <!-- Debug Info 
     <div id="debug-info">
@@ -385,12 +602,58 @@
     const LEAD_TIME = 3; // seconds (must match backend)
 
     // ============================================================================
+    // INSTRUCTIONS MODAL
+    // ============================================================================
+    const instructionsModal = document.getElementById('instructions-modal');
+    const closeModalBtn = document.getElementById('close-modal-btn');
+    const helpBtn = document.getElementById('help-btn');
+
+    // Close modal when button is clicked
+    closeModalBtn.addEventListener('click', () => {
+        instructionsModal.classList.remove('active');
+        console.log('[INSTRUCTIONS] Modal closed');
+    });
+
+    // Open modal when help button is clicked
+    helpBtn.addEventListener('click', () => {
+        instructionsModal.classList.add('active');
+        console.log('[INSTRUCTIONS] Modal opened via help button');
+    });
+
+    // Close modal when clicking outside the content
+    instructionsModal.addEventListener('click', (e) => {
+        if (e.target === instructionsModal) {
+            instructionsModal.classList.remove('active');
+            console.log('[INSTRUCTIONS] Modal closed by clicking outside');
+        }
+    });
+
+    console.log('[INSTRUCTIONS] Modal will show on first load');
+
+    // ============================================================================
     // SOCKET EVENT HANDLERS
     // ============================================================================
 
     socket.on('connect', () => {
         console.log('Connected to server');
+        console.log('[DEBUG] Socket ID:', socket.id);
+        console.log('[DEBUG] Socket connected:', socket.connected);
+        console.log('[DEBUG] Socket URL:', socket.io.uri);
+        // Test emit to verify connection
+        socket.emit('test_connection', {message: 'Hello from frontend'});
         // updateDebug('Connected! Waiting for chart...');
+    });
+
+    socket.on('test_response', (data) => {
+        console.log('[TEST RESPONSE] Backend responded:', data);
+    });
+
+    socket.on('connect_error', (error) => {
+        console.error('[ERROR] Connection error:', error);
+    });
+
+    socket.on('disconnect', (reason) => {
+        console.log('[DISCONNECT] Reason:', reason);
     });
 
     socket.on('chart_event', (event) => {
@@ -422,6 +685,42 @@
         }
     });
 
+    socket.on('chart_restarted', () => {
+        console.log('[RESTART] Chart has been restarted');
+        // Reset frontend state
+        score = 0;
+        combo = 0;
+        updateScore();
+        // Clear all active notes
+        activeNotes.forEach(note => note.remove());
+        activeNotes.clear();
+    });
+
+    socket.on('countdown', (data) => {
+        console.log('[COUNTDOWN]', data.count);
+        const overlay = document.getElementById('countdown-overlay');
+        const number = document.getElementById('countdown-number');
+        
+        // Show the overlay
+        overlay.classList.add('active');
+        
+        // Update the countdown number
+        number.textContent = data.count;
+        
+        // Remove animation and re-trigger it
+        number.style.animation = 'none';
+        setTimeout(() => {
+            number.style.animation = 'countdownPulse 1s ease-out';
+        }, 10);
+        
+        // Hide overlay after "GO"
+        if (data.count === 'GO') {
+            setTimeout(() => {
+                overlay.classList.remove('active');
+            }, 1000);
+        }
+    });
+
     // ============================================================================
     // NOTE CREATION & ANIMATION
     // ============================================================================
@@ -437,7 +736,7 @@
 
         // Calculate timing
         const now = Date.now() / 1000;
-        const timeUntilHit = event.event_time - now;
+        const timeUntilHit = (event.event_time - now) * (1 /0.85);
         
         // IMPORTANT: The note should travel from left edge to timing bar (85% position)
         // If timeUntilHit is very small, the note appears too late
@@ -445,7 +744,7 @@
         
         // Calculate how long the animation should take
         // The note needs to reach the timing bar at event_time
-        const animationDuration = Math.max(timeUntilHit, 0.5); // At least 0.5s visible
+        const animationDuration = Math.max(timeUntilHit, 0.2); // At least 0.5s visible
         
         console.log(`[NOTE CREATE] ${utensil} - Time until hit: ${timeUntilHit.toFixed(2)}s, Animation: ${animationDuration.toFixed(2)}s`);
         // (`Note spawned: ${utensil} in ${timeUntilHit.toFixed(1)}s`);
@@ -467,7 +766,7 @@
         if (event.is_hold) {
             const content = document.createElement('div');
             content.className = 'note-content';
-            content.innerHTML = `<span>${noteText}</span><span style="font-size:0.8rem;">${event.duration.toFixed(1)}s</span>`;
+            content.innerHTML = `<span>${noteText}</span><span style="font-size:10rem;">${event.duration.toFixed(1)}s</span>`;
             note.appendChild(content);
             
             // Make hold note width proportional to duration
@@ -507,7 +806,8 @@
 
     function formatTarget(utensil, target) {
         if (utensil === 'pan') {
-            if (target === 'high') return '🔥';
+            if (target === 'high') return '⬆️';
+            if (target === 'medium') return '🔥';
             if (target === 'low') return '🌡️';
             return target;
         } else if (utensil === 'cutting_board') {
@@ -591,6 +891,21 @@
     //         messages[messages.length - 1].remove();
     //     }
     // }
+
+    // ============================================================================
+    // RESTART FUNCTIONALITY
+    // ============================================================================
+
+    const restartBtn = document.getElementById('restart-btn');
+    if (restartBtn) {
+        restartBtn.addEventListener('click', () => {
+            console.log('[RESTART] Requesting chart restart...');
+            socket.emit('restart_chart');
+        });
+        console.log('[DEBUG] Restart button listener attached');
+    } else {
+        console.error('[ERROR] Restart button not found!');
+    }
 
     // ============================================================================
     // INITIALIZATION

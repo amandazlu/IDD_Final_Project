@@ -36,7 +36,20 @@ Currently, for each track, we support the following action -> sound mapping (in 
 
 
 ## TO DO LIST:
-- show beats on the frontend
-- frontend: show instruments movement with real actions
-- design/create physical prototypes
-- create hold notes for both mixing bowl AND pan
+
+- make it fun to play
+
+- add knob to stove that indicates higher/lower and also restricts the movement past a specific rotation
+- hinge to restrict pan from moving upwards
+- make the knifeboard stronger
+
+- sound design
+- frontend: show instruments movement with real actions - animation
+- change the note UI to demonstrate the different actions
+- instructions modal on the screen and help button
+
+- start our report
+
+## DONE
+- restart button on the screen
+- 3-2-1 countdown

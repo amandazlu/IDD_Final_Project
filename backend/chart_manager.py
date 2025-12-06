@@ -68,6 +68,56 @@ def stop_chart_playback():
     print("[CHART] Stop requested")
 
 
+def restart_chart_playback(socketio, loaded_chart_data):
+    """
+    Restart the rhythm chart from the beginning by resetting all state.
+    
+    This function:
+    1. Stops the current chart playback
+    2. Clears all pending notes
+    3. Resets sound rules to default state
+    4. Waits for threads to finish
+    5. Starts a fresh chart playback
+    
+    Args:
+        socketio: SocketIO instance for sending events to frontend
+        loaded_chart_data: Parsed chart data from parse_midi_to_rhythm()
+    """
+    global chart_playing, chart_thread, miss_checker_thread
+    
+    print("[RESTART] Stopping current chart...")
+    
+    # Stop current chart playback
+    chart_playing = False
+    
+    # Wait for threads to finish
+    if chart_thread and chart_thread.is_alive():
+        chart_thread.join(timeout=2.0)
+        print("[RESTART] Chart thread stopped")
+    
+    if miss_checker_thread and miss_checker_thread.is_alive():
+        miss_checker_thread.join(timeout=2.0)
+        print("[RESTART] Miss checker thread stopped")
+    
+    # Clear all pending notes
+    with pending_lock:
+        pending_notes.clear()
+        print("[RESTART] Cleared pending notes")
+    
+    # Reset sound rules to default target values
+    with sound_rules_lock:
+        for utensil in SOUND_RULES:
+            SOUND_RULES[utensil]["target_value"] = None
+        print("[RESTART] Reset sound rules")
+    
+    # Small delay to ensure clean state
+    time.sleep(0.1)
+    
+    # Start fresh chart playback
+    print("[RESTART] Starting fresh chart playback...")
+    start_chart_playback(socketio, loaded_chart_data)
+
+
 def _chart_loop(socketio):
     """
     Main chart playback loop. Manages two priority queues:
@@ -83,8 +133,16 @@ def _chart_loop(socketio):
     """
     global chart_playing
     
-    # Initial countdown before chart starts
-    time.sleep(5)
+    # 3-2-1 countdown before chart starts
+    print("[COUNTDOWN] Starting countdown...")
+    for count in [3, 2, 1]:
+        print(f"[COUNTDOWN] {count}...")
+        socketio.emit("countdown", {"count": count})
+        time.sleep(1)
+    
+    print("[COUNTDOWN] GO!")
+    socketio.emit("countdown", {"count": "GO"})
+    time.sleep(2)
 
     events = chart_data["events"]
     start_time = time.time() + chart_data["offset"]

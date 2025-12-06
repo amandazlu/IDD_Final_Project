@@ -9,7 +9,7 @@ import pygame
 # ============================================================================
 
 LEAD_TIME = 3  # seconds early to show notes visually
-HIT_WINDOW = 3  # ±150ms window for hitting notes
+HIT_WINDOW = 0.5  # ±150ms window for hitting notes
 HOLD_CHECK_INTERVAL = 0.05  # check hold status every 50ms
 HOLD_GRACE_PERIOD = 0.1  # 100ms grace before breaking a hold
 HOLD_THRESHOLD = 1
