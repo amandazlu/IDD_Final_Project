@@ -5,7 +5,10 @@ Audio Manager - Sound loading and playback
 import pygame
 import os
 from functools import lru_cache
-from config import CHANNELS
+from config import CHANNELS, LOW_FIRE, HIGH_FIRE, MED_FIRE
+
+# Magic Numbers
+
 
 # ============================================================================
 # PLAYBACK STATE
@@ -43,20 +46,24 @@ def should_play(utensil, sensor_data, target, threshold):
         # Pan uses rotation sensor AND button state (on/off)
         button_held = sensor_data.get('distance', False)
         
-        # Determine stove state based on target
-        if "off" in str(target):
-            stove_on = (button_held == False)  # OFF means button NOT held
-        elif "on" in str(target):
-            stove_on = (button_held == True)   # ON means button held
-        else:
-            stove_on = True  # Legacy: assume stove is on
+        # # Determine stove state based on target
+        # if "off" in str(target):
+        #     stove_on = (button_held == False)  # OFF means button NOT held
+        # elif "on" in str(target):
+        #     stove_on = (button_held == True)   # ON means button held
+        # else:
+        #     stove_on = True  # Legacy: assume stove is on
         
         # Then check rotation threshold
         curr_val = sensor_data.get('rotation', 0)
         if "low" in str(target):
-            return stove_on and curr_val < threshold
+            return curr_val <= LOW_FIRE + threshold and curr_val >= LOW_FIRE - threshold 
+        elif "med" in str(target):
+            return curr_val <= MED_FIRE + threshold and curr_val >= MED_FIRE - threshold 
         elif "high" in str(target):
-            return stove_on and curr_val > threshold
+            return curr_val <= HIGH_FIRE + threshold and curr_val >= HIGH_FIRE - threshold 
+        elif "flip" in str(target):
+            return button_held 
         
         return False
 

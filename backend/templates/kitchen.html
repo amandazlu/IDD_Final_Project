@@ -1073,6 +1073,20 @@
         
         // Set note content
         const noteText = formatTarget(utensil, event.target);
+       
+
+        if (utensil === 'pan'){
+            if (event.target === 'low') {
+                note.style.fontSize = '1.5rem';
+                note.style.color
+            }
+            else if (event.target === 'med') {
+                note.style.fontSize = '2.5rem';
+            }
+            else if (event.target === 'high') {
+                note.style.fontSize = '4rem';
+            }   
+        }
         
         if (event.is_hold) {
             const content = document.createElement('div');
@@ -1117,14 +1131,14 @@
 
     function formatTarget(utensil, target) {
         if (utensil === 'pan') {
-            if (target === 'high+on') return '🔥🍳';
-            if (target === 'high+off') return '🔥🚫';
-            if (target === 'low+on') return '🌡️🍳';
-            if (target === 'low+off') return '🌡️🚫';
-            // Legacy support
+            // if (target === 'high+on') return '🔥🍳';
+            // if (target === 'high+off') return '🔥🚫';
+            // if (target === 'low+on') return '🌡️🍳';
+            // if (target === 'low+off') return '🌡️🚫';
             if (target === 'high') return '🔥';
-            if (target === 'medium') return '🔥';
-            if (target === 'low') return '🌡️';
+            if (target === 'med') return '🔥';
+            if (target === 'low') return '🔥';
+            if (target === 'flip') return '🍳';
             return target;
         } else if (utensil === 'cutting_board') {
             if (target === '0') return '🍅';  // Tomato

@@ -49,7 +49,7 @@ CHANNELS = {
 SOUND_RULES = {
     'pan': {
         'file': 'sounds/pan_sizzle.mp3',
-        'threshold': 5,
+        'threshold': 2,
         'target_value': None  # Will be set by chart (e.g., "low" or "high")
     },
     'cutting_board': {
@@ -63,3 +63,8 @@ SOUND_RULES = {
         'target_value': None  # Will be set by chart (e.g., acceleration value)
     }
 }
+
+# Pan Fire Values
+LOW_FIRE = 5
+MED_FIRE = 10
+HIGH_FIRE = 15

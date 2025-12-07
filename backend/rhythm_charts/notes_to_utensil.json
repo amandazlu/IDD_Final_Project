@@ -2,12 +2,10 @@
     "Instrument 1" : {
         "name": "pan",
         "targets": {
-            "C4": "high+off",
-            "D4": "high+off",
-            "E4": "high+off",
-            "F4": "high+on",
-            "G4": "low+off",
-            "A4": "low+on"
+            "C4": "low",
+            "D4": "flip",
+            "E4": "med",
+            "G4": "high"
         }
     },
     "Instrument 2": {

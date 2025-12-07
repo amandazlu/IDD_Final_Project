@@ -155,13 +155,13 @@ def has_changed(prev, current):
 
     # Distance jitter reduction
     if current["distance"] != prev["distance"]:
-        return True
+        return current["distance"]
 
     # Button is binary, no jitter
     if current["button"] == True:
         return True
-    elif current["button"] != prev["button"]:
-        return True
+    # elif current["button"] != prev["button"]:
+    #     return True
 
     return False
 
@@ -332,7 +332,6 @@ def main():
             }
             
             if has_changed(previous_data, current_data):
-                previous_data = current_data.copy()
 
                 mqtt_payload = json.dumps({
                     'mac': mac_address,
@@ -355,7 +354,7 @@ def main():
                             client.reconnect()
                         except Exception as e:
                             print(f"[ERROR] Reconnect failed: {e}")
-            
+            previous_data = current_data.copy()
             time.sleep(0.1)  # Small delay to prevent CPU spinning
             
         except Exception as e:

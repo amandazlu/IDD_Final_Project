@@ -17,7 +17,7 @@
       "octave": 4,
       "velocity": 0.8,
       "duration": 0.876,
-      "target": "high+off"
+      "target": "low"
     },
     {
       "time": 6.095,
@@ -47,7 +47,7 @@
       "octave": 4,
       "velocity": 0.8,
       "duration": 0.438,
-      "target": "high+off"
+      "target": "flip"
     },
     {
       "time": 7.19,
@@ -72,12 +72,12 @@
       "channel": 0,
       "instrument": "acoustic grand piano",
       "midi": 60,
-      "note_name": "C4",
-      "pitch": "C",
+      "note_name": "D4",
+      "pitch": "D",
       "octave": 4,
       "velocity": 0.8,
       "duration": 0.438,
-      "target": "high+off"
+      "target": "flip"
     },
     {
       "time": 8.285,
@@ -92,7 +92,7 @@
       "octave": 4,
       "velocity": 0.8,
       "duration": 0.438,
-      "target": "high+off"
+      "target": "flip"
     },
     {
       "time": 9.38,
@@ -102,12 +102,12 @@
       "channel": 0,
       "instrument": "acoustic grand piano",
       "midi": 60,
-      "note_name": "C4",
-      "pitch": "C",
+      "note_name": "E4",
+      "pitch": "E",
       "octave": 4,
       "velocity": 0.8,
       "duration": 0.876,
-      "target": "high+off"
+      "target": "med"
     },
     {
       "time": 10.475,
@@ -192,12 +192,12 @@
       "channel": 0,
       "instrument": "acoustic grand piano",
       "midi": 62,
-      "note_name": "D4",
-      "pitch": "D",
+      "note_name": "G4",
+      "pitch": "G",
       "octave": 4,
       "velocity": 0.8,
       "duration": 0.876,
-      "target": "high+off"
+      "target": "high"
     },
     {
       "time": 14.855,
@@ -222,12 +222,12 @@
       "channel": 0,
       "instrument": "acoustic grand piano",
       "midi": 60,
-      "note_name": "C4",
-      "pitch": "C",
+      "note_name": "D4",
+      "pitch": "D",
       "octave": 4,
       "velocity": 0.8,
       "duration": 0.438,
-      "target": "high+off"
+      "target": "flip"
     },
     {
       "time": 15.95,
@@ -257,7 +257,7 @@
       "octave": 4,
       "velocity": 0.8,
       "duration": 0.438,
-      "target": "high+off"
+      "target": "flip"
     },
     {
       "time": 17.045,
@@ -267,12 +267,12 @@
       "channel": 0,
       "instrument": "acoustic grand piano",
       "midi": 60,
-      "note_name": "C4",
-      "pitch": "C",
+      "note_name": "D4",
+      "pitch": "D",
       "octave": 4,
       "velocity": 0.8,
       "duration": 0.438,
-      "target": "high+off"
+      "target": "flip"
     },
     {
       "time": 18.14,
@@ -282,12 +282,12 @@
       "channel": 0,
       "instrument": "acoustic grand piano",
       "midi": 62,
-      "note_name": "D4",
-      "pitch": "D",
+      "note_name": "E4",
+      "pitch": "E",
       "octave": 4,
       "velocity": 0.8,
       "duration": 0.876,
-      "target": "high+off"
+      "target": "med"
     },
     {
       "time": 19.235,
@@ -297,12 +297,12 @@
       "channel": 0,
       "instrument": "acoustic grand piano",
       "midi": 60,
-      "note_name": "C4",
-      "pitch": "C",
+      "note_name": "E4",
+      "pitch": "E",
       "octave": 4,
       "velocity": 0.8,
       "duration": 0.876,
-      "target": "high+off"
+      "target": "med"
     },
     {
       "time": 20.33,
@@ -372,12 +372,12 @@
       "channel": 0,
       "instrument": "acoustic grand piano",
       "midi": 62,
-      "note_name": "D4",
-      "pitch": "D",
+      "note_name": "C4",
+      "pitch": "C",
       "octave": 4,
       "velocity": 0.8,
       "duration": 0.876,
-      "target": "high+off"
+      "target": "low"
     },
     {
       "time": 23.615,
@@ -387,12 +387,12 @@
       "channel": 0,
       "instrument": "acoustic grand piano",
       "midi": 60,
-      "note_name": "C4",
-      "pitch": "C",
+      "note_name": "G4",
+      "pitch": "G",
       "octave": 4,
       "velocity": 0.8,
       "duration": 0.876,
-      "target": "high+off"
+      "target": "high"
     },
     {
       "time": 24.71,
@@ -407,7 +407,7 @@
       "octave": 4,
       "velocity": 0.8,
       "duration": 0.438,
-      "target": "high+off"
+      "target": "flip"
     },
     {
       "time": 24.71,
@@ -432,12 +432,12 @@
       "channel": 0,
       "instrument": "acoustic grand piano",
       "midi": 60,
-      "note_name": "C4",
-      "pitch": "C",
+      "note_name": "D4",
+      "pitch": "D",
       "octave": 4,
       "velocity": 0.8,
       "duration": 0.438,
-      "target": "high+off"
+      "target": "flip"
     },
     {
       "time": 25.805,
@@ -452,7 +452,7 @@
       "octave": 4,
       "velocity": 0.8,
       "duration": 0.438,
-      "target": "high+off"
+      "target": "flip"
     },
     {
       "time": 26.9,
@@ -467,7 +467,7 @@
       "octave": 4,
       "velocity": 0.8,
       "duration": 0.438,
-      "target": "high+off"
+      "target": "low"
     },
     {
       "time": 27.448,
@@ -492,12 +492,12 @@
       "channel": 0,
       "instrument": "acoustic grand piano",
       "midi": 62,
-      "note_name": "D4",
-      "pitch": "D",
+      "note_name": "E4",
+      "pitch": "E",
       "octave": 4,
       "velocity": 0.8,
       "duration": 0.438,
-      "target": "high+off"
+      "target": "med"
     },
     {
       "time": 29.09,
@@ -587,7 +587,7 @@
       "octave": 4,
       "velocity": 0.8,
       "duration": 0.876,
-      "target": "high+off"
+      "target": "low"
     },
     {
       "time": 32.375,
@@ -597,12 +597,12 @@
       "channel": 0,
       "instrument": "acoustic grand piano",
       "midi": 62,
-      "note_name": "D4",
-      "pitch": "D",
+      "note_name": "G4",
+      "pitch": "G",
       "octave": 4,
       "velocity": 0.8,
       "duration": 0.876,
-      "target": "high+off"
+      "target": "high"
     },
     {
       "time": 33.47,
@@ -612,12 +612,12 @@
       "channel": 0,
       "instrument": "acoustic grand piano",
       "midi": 60,
-      "note_name": "C4",
-      "pitch": "C",
+      "note_name": "D4",
+      "pitch": "D",
       "octave": 4,
       "velocity": 0.8,
       "duration": 0.438,
-      "target": "high+off"
+      "target": "flip"
     },
     {
       "time": 34.018,
@@ -632,7 +632,7 @@
       "octave": 4,
       "velocity": 0.8,
       "duration": 0.438,
-      "target": "high+off"
+      "target": "flip"
     },
     {
       "time": 34.565,
@@ -642,12 +642,12 @@
       "channel": 0,
       "instrument": "acoustic grand piano",
       "midi": 60,
-      "note_name": "C4",
-      "pitch": "C",
+      "note_name": "D4",
+      "pitch": "D",
       "octave": 4,
       "velocity": 0.8,
       "duration": 0.438,
-      "target": "high+off"
+      "target": "flip"
     },
     {
       "time": 35.66,
@@ -657,12 +657,12 @@
       "channel": 0,
       "instrument": "acoustic grand piano",
       "midi": 62,
-      "note_name": "D4",
-      "pitch": "D",
+      "note_name": "E4",
+      "pitch": "E",
       "octave": 4,
       "velocity": 0.8,
       "duration": 0.438,
-      "target": "high+off"
+      "target": "med"
     },
     {
       "time": 35.66,
@@ -687,12 +687,12 @@
       "channel": 0,
       "instrument": "acoustic grand piano",
       "midi": 60,
-      "note_name": "C4",
-      "pitch": "C",
+      "note_name": "E4",
+      "pitch": "E",
       "octave": 4,
       "velocity": 0.8,
       "duration": 0.438,
-      "target": "high+off"
+      "target": "med"
     },
     {
       "time": 36.755,
@@ -732,12 +732,12 @@
       "channel": 0,
       "instrument": "acoustic grand piano",
       "midi": 62,
-      "note_name": "D4",
-      "pitch": "D",
+      "note_name": "C4",
+      "pitch": "C",
       "octave": 4,
       "velocity": 0.8,
       "duration": 0.438,
-      "target": "high+off"
+      "target": "low"
     },
     {
       "time": 38.398,
@@ -747,12 +747,12 @@
       "channel": 0,
       "instrument": "acoustic grand piano",
       "midi": 60,
-      "note_name": "C4",
-      "pitch": "C",
+      "note_name": "E4",
+      "pitch": "E",
       "octave": 4,
       "velocity": 0.8,
       "duration": 0.438,
-      "target": "high+off"
+      "target": "med"
     },
     {
       "time": 38.945,
@@ -762,12 +762,12 @@
       "channel": 0,
       "instrument": "acoustic grand piano",
       "midi": 62,
-      "note_name": "D4",
-      "pitch": "D",
+      "note_name": "G4",
+      "pitch": "G",
       "octave": 4,
       "velocity": 0.8,
       "duration": 0.438,
-      "target": "high+off"
+      "target": "high"
     }
   ]
 }
