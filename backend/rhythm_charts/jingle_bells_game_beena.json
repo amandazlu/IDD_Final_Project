@@ -550,6 +550,28 @@
           "duration": 1.0
         },
         {
+          "midi": 56,
+          "time": 7.738,
+          "ticks": 0,
+          "durationTicks": 480,
+          "name": "A3",
+          "pitch": "A",
+          "octave": 4,
+          "velocity": 0.8,
+          "duration": 0.438
+        },
+        {
+          "midi": 57,
+          "time": 8.285,
+          "ticks": 0,
+          "durationTicks": 480,
+          "name": "G3",
+          "pitch": "G",
+          "octave": 4,
+          "velocity": 0.8,
+          "duration": 0.438
+        },
+        {
           "midi": 53,
           "time": 11.57,
           "ticks": 0,
@@ -559,6 +581,28 @@
           "octave": 3,
           "velocity": 0.8,
           "duration": 1.0
+        },
+        {
+          "midi": 49,
+          "time": 12.118,
+          "ticks": 0,
+          "durationTicks": 480,
+          "name": "E3",
+          "pitch": "E",
+          "octave": 3,
+          "velocity": 0.8,
+          "duration": 0.438
+        },
+        {
+          "midi": 48,
+          "time": 12.665,
+          "ticks": 0,
+          "durationTicks": 480,
+          "name": "F3",
+          "pitch": "F",
+          "octave": 3,
+          "velocity": 0.8,
+          "duration": 0.438
         },
         {
           "midi": 52,
@@ -572,6 +616,28 @@
           "duration": 1.0
         },
         {
+          "midi": 62,
+          "time": 16.498,
+          "ticks": 0,
+          "durationTicks": 480,
+          "name": "A3",
+          "pitch": "A",
+          "octave": 4,
+          "velocity": 0.8,
+          "duration": 0.438
+        },
+        {
+          "midi": 60,
+          "time": 17.045,
+          "ticks": 0,
+          "durationTicks": 480,
+          "name": "E3",
+          "pitch": "E",
+          "octave": 4,
+          "velocity": 0.8,
+          "duration": 0.438
+        },
+        {
           "midi": 55,
           "time": 20.33,
           "ticks": 0,
@@ -581,6 +647,28 @@
           "octave": 3,
           "velocity": 0.8,
           "duration": 1.0
+        },
+        {
+          "midi": 59,
+          "time": 20.878,
+          "ticks": 0,
+          "durationTicks": 480,
+          "name": "G3",
+          "pitch": "G",
+          "octave": 3,
+          "velocity": 0.8,
+          "duration": 0.438
+        },
+        {
+          "midi": 60,
+          "time": 21.425,
+          "ticks": 0,
+          "durationTicks": 480,
+          "name": "E3",
+          "pitch": "E",
+          "octave": 3,
+          "velocity": 0.8,
+          "duration": 0.438
         },
         {
           "midi": 53,
@@ -594,6 +682,39 @@
           "duration": 1
         },
         {
+          "midi": 60,
+          "time": 29.638,
+          "ticks": 0,
+          "durationTicks": 480,
+          "name": "A3",
+          "pitch": "A",
+          "octave": 4,
+          "velocity": 0.8,
+          "duration": 0.438
+        },
+        {
+          "midi": 57,
+          "time": 30.185,
+          "ticks": 0,
+          "durationTicks": 480,
+          "name": "E3",
+          "pitch": "E",
+          "octave": 4,
+          "velocity": 0.8,
+          "duration": 0.438
+        },
+        {
+          "midi": 59,
+          "time": 30.733,
+          "ticks": 0,
+          "durationTicks": 480,
+          "name": "G3",
+          "pitch": "G",
+          "octave": 4,
+          "velocity": 0.8,
+          "duration": 0.438
+        },
+        {
           "midi": 52,
           "time": 24.71,
           "ticks": 0,
@@ -605,6 +726,28 @@
           "duration": 1.0
         },
         {
+          "midi": 60,
+          "time": 25.258,
+          "ticks": 0,
+          "durationTicks": 480,
+          "name": "G3",
+          "pitch": "G",
+          "octave": 4,
+          "velocity": 0.8,
+          "duration": 0.438
+        },
+        {
+          "midi": 62,
+          "time": 25.805,
+          "ticks": 0,
+          "durationTicks": 480,
+          "name": "F3",
+          "pitch": "F",
+          "octave": 4,
+          "velocity": 0.8,
+          "duration": 0.438
+        },
+        {
           "midi": 55,
           "time": 35.66,
           "ticks": 0,
@@ -614,6 +757,28 @@
           "octave": 3,
           "velocity": 0.8,
           "duration": 1.0
+        },
+        {
+          "midi": 60,
+          "time": 36.208,
+          "ticks": 0,
+          "durationTicks": 480,
+          "name": "E3",
+          "pitch": "E",
+          "octave": 4,
+          "velocity": 0.8,
+          "duration": 0.438
+        },
+        {
+          "midi": 62,
+          "time": 38.945,
+          "ticks": 0,
+          "durationTicks": 480,
+          "name": "A3",
+          "pitch": "A",
+          "octave": 4,
+          "velocity": 0.8,
+          "duration": 0.438
         }
       ],
       "controlChanges": {},

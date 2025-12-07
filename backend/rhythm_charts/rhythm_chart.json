@@ -80,6 +80,21 @@
       "target": "flip"
     },
     {
+      "time": 7.738,
+      "type": "note",
+      "track": "Instrument 3",
+      "utensil": "mixing_bowl",
+      "channel": 2,
+      "instrument": "string ensemble 1",
+      "midi": 56,
+      "note_name": "A3",
+      "pitch": "A",
+      "octave": 4,
+      "velocity": 0.8,
+      "duration": 0.438,
+      "target": "down"
+    },
+    {
       "time": 8.285,
       "type": "note",
       "track": "Instrument 1",
@@ -93,6 +108,21 @@
       "velocity": 0.8,
       "duration": 0.438,
       "target": "flip"
+    },
+    {
+      "time": 8.285,
+      "type": "note",
+      "track": "Instrument 3",
+      "utensil": "mixing_bowl",
+      "channel": 2,
+      "instrument": "string ensemble 1",
+      "midi": 57,
+      "note_name": "G3",
+      "pitch": "G",
+      "octave": 4,
+      "velocity": 0.8,
+      "duration": 0.438,
+      "target": "up"
     },
     {
       "time": 9.38,
@@ -170,6 +200,21 @@
       "target": "1"
     },
     {
+      "time": 12.118,
+      "type": "note",
+      "track": "Instrument 3",
+      "utensil": "mixing_bowl",
+      "channel": 2,
+      "instrument": "string ensemble 1",
+      "midi": 49,
+      "note_name": "E3",
+      "pitch": "E",
+      "octave": 3,
+      "velocity": 0.8,
+      "duration": 0.438,
+      "target": "right"
+    },
+    {
       "time": 12.665,
       "type": "note",
       "track": "Instrument 2",
@@ -183,6 +228,21 @@
       "velocity": 0.8,
       "duration": 0.438,
       "target": "0"
+    },
+    {
+      "time": 12.665,
+      "type": "note",
+      "track": "Instrument 3",
+      "utensil": "mixing_bowl",
+      "channel": 2,
+      "instrument": "string ensemble 1",
+      "midi": 48,
+      "note_name": "F3",
+      "pitch": "F",
+      "octave": 3,
+      "velocity": 0.8,
+      "duration": 0.438,
+      "target": "left"
     },
     {
       "time": 13.76,
@@ -260,6 +320,21 @@
       "target": "flip"
     },
     {
+      "time": 16.498,
+      "type": "note",
+      "track": "Instrument 3",
+      "utensil": "mixing_bowl",
+      "channel": 2,
+      "instrument": "string ensemble 1",
+      "midi": 62,
+      "note_name": "A3",
+      "pitch": "A",
+      "octave": 4,
+      "velocity": 0.8,
+      "duration": 0.438,
+      "target": "down"
+    },
+    {
       "time": 17.045,
       "type": "note",
       "track": "Instrument 1",
@@ -273,6 +348,21 @@
       "velocity": 0.8,
       "duration": 0.438,
       "target": "flip"
+    },
+    {
+      "time": 17.045,
+      "type": "note",
+      "track": "Instrument 3",
+      "utensil": "mixing_bowl",
+      "channel": 2,
+      "instrument": "string ensemble 1",
+      "midi": 60,
+      "note_name": "E3",
+      "pitch": "E",
+      "octave": 4,
+      "velocity": 0.8,
+      "duration": 0.438,
+      "target": "right"
     },
     {
       "time": 18.14,
@@ -350,6 +440,21 @@
       "target": "1"
     },
     {
+      "time": 20.878,
+      "type": "note",
+      "track": "Instrument 3",
+      "utensil": "mixing_bowl",
+      "channel": 2,
+      "instrument": "string ensemble 1",
+      "midi": 59,
+      "note_name": "G3",
+      "pitch": "G",
+      "octave": 3,
+      "velocity": 0.8,
+      "duration": 0.438,
+      "target": "up"
+    },
+    {
       "time": 21.425,
       "type": "note",
       "track": "Instrument 2",
@@ -363,6 +468,21 @@
       "velocity": 0.8,
       "duration": 0.438,
       "target": "1"
+    },
+    {
+      "time": 21.425,
+      "type": "note",
+      "track": "Instrument 3",
+      "utensil": "mixing_bowl",
+      "channel": 2,
+      "instrument": "string ensemble 1",
+      "midi": 60,
+      "note_name": "E3",
+      "pitch": "E",
+      "octave": 3,
+      "velocity": 0.8,
+      "duration": 0.438,
+      "target": "right"
     },
     {
       "time": 22.52,
@@ -440,6 +560,21 @@
       "target": "flip"
     },
     {
+      "time": 25.258,
+      "type": "note",
+      "track": "Instrument 3",
+      "utensil": "mixing_bowl",
+      "channel": 2,
+      "instrument": "string ensemble 1",
+      "midi": 60,
+      "note_name": "G3",
+      "pitch": "G",
+      "octave": 4,
+      "velocity": 0.8,
+      "duration": 0.438,
+      "target": "up"
+    },
+    {
       "time": 25.805,
       "type": "note",
       "track": "Instrument 1",
@@ -453,6 +588,21 @@
       "velocity": 0.8,
       "duration": 0.438,
       "target": "flip"
+    },
+    {
+      "time": 25.805,
+      "type": "note",
+      "track": "Instrument 3",
+      "utensil": "mixing_bowl",
+      "channel": 2,
+      "instrument": "string ensemble 1",
+      "midi": 62,
+      "note_name": "F3",
+      "pitch": "F",
+      "octave": 4,
+      "velocity": 0.8,
+      "duration": 0.438,
+      "target": "left"
     },
     {
       "time": 26.9,
@@ -545,6 +695,21 @@
       "target": "2"
     },
     {
+      "time": 29.638,
+      "type": "note",
+      "track": "Instrument 3",
+      "utensil": "mixing_bowl",
+      "channel": 2,
+      "instrument": "string ensemble 1",
+      "midi": 60,
+      "note_name": "A3",
+      "pitch": "A",
+      "octave": 4,
+      "velocity": 0.8,
+      "duration": 0.438,
+      "target": "down"
+    },
+    {
       "time": 30.185,
       "type": "note",
       "track": "Instrument 2",
@@ -560,6 +725,21 @@
       "target": "2"
     },
     {
+      "time": 30.185,
+      "type": "note",
+      "track": "Instrument 3",
+      "utensil": "mixing_bowl",
+      "channel": 2,
+      "instrument": "string ensemble 1",
+      "midi": 57,
+      "note_name": "E3",
+      "pitch": "E",
+      "octave": 4,
+      "velocity": 0.8,
+      "duration": 0.438,
+      "target": "right"
+    },
+    {
       "time": 30.733,
       "type": "note",
       "track": "Instrument 2",
@@ -573,6 +753,21 @@
       "velocity": 0.8,
       "duration": 0.438,
       "target": "2"
+    },
+    {
+      "time": 30.733,
+      "type": "note",
+      "track": "Instrument 3",
+      "utensil": "mixing_bowl",
+      "channel": 2,
+      "instrument": "string ensemble 1",
+      "midi": 59,
+      "note_name": "G3",
+      "pitch": "G",
+      "octave": 4,
+      "velocity": 0.8,
+      "duration": 0.438,
+      "target": "up"
     },
     {
       "time": 31.28,
@@ -695,6 +890,21 @@
       "target": "med"
     },
     {
+      "time": 36.208,
+      "type": "note",
+      "track": "Instrument 3",
+      "utensil": "mixing_bowl",
+      "channel": 2,
+      "instrument": "string ensemble 1",
+      "midi": 60,
+      "note_name": "E3",
+      "pitch": "E",
+      "octave": 4,
+      "velocity": 0.8,
+      "duration": 0.438,
+      "target": "right"
+    },
+    {
       "time": 36.755,
       "type": "note",
       "track": "Instrument 2",
@@ -768,6 +978,21 @@
       "velocity": 0.8,
       "duration": 0.438,
       "target": "high"
+    },
+    {
+      "time": 38.945,
+      "type": "note",
+      "track": "Instrument 3",
+      "utensil": "mixing_bowl",
+      "channel": 2,
+      "instrument": "string ensemble 1",
+      "midi": 62,
+      "note_name": "A3",
+      "pitch": "A",
+      "octave": 4,
+      "velocity": 0.8,
+      "duration": 0.438,
+      "target": "down"
     }
   ]
 }
