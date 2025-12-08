@@ -107,7 +107,7 @@ if __name__ == '__main__':
     start_chart_playback(socketio, chart_data)
     
     # Run Flask app
-    socketio.run(app, host='0.0.0.0', port=5002, debug=False, allow_unsafe_werkzeug=True)
+    socketio.run(app, host='0.0.0.0', port=5001, debug=False, allow_unsafe_werkzeug=True)
     
     # Cleanup
     close_audio()

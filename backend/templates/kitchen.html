@@ -31,7 +31,7 @@
 
         /* Header */
         #game-header {
-            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            background: linear-gradient(135deg, #ee5a6f 0%, #ee5a6f 100%);
             padding: 1rem 2rem;
             text-align: center;
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
@@ -671,6 +671,39 @@
         #help-btn:active {
             transform: scale(0.95);
         }
+
+        /* Restart Button */
+        #restart-btn {
+            position: absolute;
+            top: 1.5rem;
+            left: 2rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f5c73c 0%, #f5c73c 100%);
+            color: white;
+            border: 3px solid white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(231,76,60,0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            margin: 0;
+        }
+
+        #restart-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(231,76,60,0.6);
+        }
+
+        #restart-btn:active {
+            transform: scale(0.95);
+        }
     </style>
 </head>
 
@@ -715,15 +748,14 @@
             
             <h3>🔧 The Instruments</h3>
             <ul>
-                <li><span class="instrument-icon">🍳</span><strong>Pan:</strong> Toggle heat between high (🔥) and low (🌡️)</li>
-                <li><span class="instrument-icon">🔪</span><strong>Knife:</strong> Lift the knife up (⬆️) when notes appear</li>
+                <li><span class="instrument-icon">🍳</span><strong>Pan:</strong> Turn the knob to adjust heat based on the fire emoji size (low, med, high) and click the button to send the note. When you see the flip emoji (🍳), flip the pan!</li>
+                <li><span class="instrument-icon">🔪</span><strong>Knife:</strong> Chop the corresponding vegetable shown in the note (🍅 tomato, 🧅 onion, 🥕 carrot)</li>
                 <li><span class="instrument-icon">🥣</span><strong>Bowl:</strong> Rotate clockwise (↻) or counterclockwise (↺) on the rim</li>
             </ul>
             
             <h3>📊 Scoring</h3>
             <ul>
-                <li><strong>Tap Notes:</strong> 100 points for hitting at the right time</li>
-                <li><strong>Hold Notes:</strong> Hold the action for the duration shown</li>
+                <li><strong>Hit Notes:</strong> 100 points for hitting at the right time</li>
                 <li><strong>Perfect Hit:</strong> Within 50ms of the timing bar</li>
                 <li><strong>Combo:</strong> Chain hits together for higher scores!</li>
             </ul>
@@ -732,7 +764,6 @@
             <ul>
                 <li>Watch notes slide from left to right across each track</li>
                 <li>Perform the action when notes reach the red timing bar</li>
-                <li>Hold notes show duration - maintain the action!</li>
                 <li>Miss too many and your combo resets to 0</li>
             </ul>
             
@@ -745,12 +776,15 @@
         <div id="countdown-number">3</div>
     </div>
 
+    <!-- Restart Button -->
+    <button id="restart-btn" title="Restart Song">🔄</button>
+
     <!-- Help Button -->
     <button id="help-btn" title="Show Instructions">?</button>
 
     <!-- Header -->
     <div id="game-header">
-        <h1 id="game-title">🍳 Kitchen Rhythm 🎵</h1>
+        <img src="/static/short_staffed_cropped.png" alt="Short Staffed" style="height: 100%; max-height: 100px; width: auto; display: block; margin: 0 auto;">
     </div>
 
     <!-- Score Display -->
@@ -759,8 +793,6 @@
         <div id="score">0</div>
         <div id="combo">Combo: 0x</div>
     </div>
-
-     <button id="restart-btn" style="margin-top: 1rem; padding: 0.5rem 1rem; font-size: 1rem; cursor: pointer; background: #e74c3c; color: white; border: none; border-radius: 8px; font-weight: 600;">🔄 Restart Song</button>
 
     <!-- Debug Info 
     <div id="debug-info">
