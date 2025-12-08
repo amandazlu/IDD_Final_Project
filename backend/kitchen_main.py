@@ -94,6 +94,7 @@ if __name__ == '__main__':
     print(f"[CHART LOADED] {len(chart_data['events'])} events loaded")
 
     chart_data['music_file'] = MUSIC_FILE
+    chart_data['offset'] = -0.2
     
     # Start MQTT client
     from mqtt_handler import mqtt_client

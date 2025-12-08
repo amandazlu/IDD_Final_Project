@@ -154,7 +154,8 @@ def _chart_loop(socketio):
     time.sleep(1)
 
     events = chart_data["events"]
-    start_time = time.time() + chart_data["offset"]
+    manual_offset = chart_data.get("offset", 0)
+    start_time = time.time() + manual_offset
 
     # Two priority queues for scheduling events
     visual_queue = []      # (visual_time, unique_id, event)
